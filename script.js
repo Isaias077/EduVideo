@@ -36,11 +36,11 @@ function EduVideo({
   PausePoints = ["empty"],
 }) {
   video = document.getElementById(VideoID);
-  if (SpawnPoints.length > 10) {
+  SpawnPoints.length > 10 ?
     console.warn(
       "Atencion: No se recomienda usar más de 10 puntos de aparición. Debido a que puede afectar el rendimiento de la pagina."
-    );
-  }
+    ) : null
+
   if (SpawnPoints[0] !== "empty") {
     videoPoints(SpawnPoints);
   }
@@ -49,6 +49,10 @@ function EduVideo({
   }
 }
 
+/**
+* This function defines pause points
+* @param {array} PausePoints 
+*/
 function videoPause(PausePoints) {
   setInterval(() => {
     time = video.currentTime;
@@ -60,6 +64,10 @@ function videoPause(PausePoints) {
   }, 1000);
 }
 
+/**
+* This function defines spawn points
+* @param {array} points 
+*/
 function videoPoints(points) {
   setInterval(() => {
     time = video.currentTime;
@@ -70,6 +78,13 @@ function videoPoints(points) {
   }, 1000);
 }
 
+/**
+* This function control display of elements
+* @param {number} time 
+* @param {number} initialTime 
+* @param {number} finalTime 
+* @param {DOMElement} element 
+*/
 function setPoint(time, initialTime, finalTime, element) {
   try {
     if (time > initialTime && time < finalTime) {
@@ -80,6 +95,9 @@ function setPoint(time, initialTime, finalTime, element) {
   } catch (error) {}
 }
 
+/**
+* This function pause and play the video
+*/
 function videoToggle() {
   if (video.paused) {
     video.play();
