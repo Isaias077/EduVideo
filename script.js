@@ -1,10 +1,10 @@
 /**
 
- * @fileoverview Menú aprMenu, desplegable con efecto expansión suavizado
+ * @fileoverview Library for creating and managing HTML5 video elements.
 
  *
 
- * @version 1.0
+ * @version 0.5
 
  *
 
@@ -16,7 +16,7 @@
 
  * History
 
- * v1.0 – Se mejoró la compatibilidad con navegadores Opera
+ * v0.5 – Se mejoró la compatibilidad con navegadores Opera
 
  * ----
 
@@ -32,8 +32,8 @@ let isPausedStatus = false;
 // Functions
 function EduVideo({
   VideoID = "video",
-  SpawnPoints = [{ element: "idElemento", initialTime: 0, finalTime: 0 }],
-  PausePoints = [{ element: "idElemento", initialTime: 0, isPause: false }],
+  SpawnPoints = ["empty"],
+  PausePoints = ["empty"],
 }) {
   video = document.getElementById(VideoID);
   if (SpawnPoints.length > 10) {
@@ -41,7 +41,23 @@ function EduVideo({
       "Atencion: No se recomienda usar más de 10 puntos de aparición. Debido a que puede afectar el rendimiento de la pagina."
     );
   }
-  videoPoints(SpawnPoints);
+  if (SpawnPoints[0] !== "empty") {
+    videoPoints(SpawnPoints);
+  }
+  if (PausePoints[0] !== "empty") {
+    videoPause(PausePoints);
+  }
+}
+
+function videoPause(PausePoints) {
+  setInterval(() => {
+    time = video.currentTime;
+    PausePoints.forEach((point) => {
+      if (point !== "empty" && point.pauseTime === Math.round(time)) {
+        video.pause();
+      }
+    });
+  }, 1000);
 }
 
 function videoPoints(points) {
@@ -55,19 +71,19 @@ function videoPoints(points) {
 }
 
 function setPoint(time, initialTime, finalTime, element) {
-  if (time > initialTime && time < finalTime) {
-    element.style.display = "block";
-  } else {
-    element.style.display = "none";
-  }
+  try {
+    if (time > initialTime && time < finalTime) {
+      element.style.display = "block";
+    } else {
+      element.style.display = "none";
+    }
+  } catch (error) {}
 }
 
 function videoToggle() {
   if (video.paused) {
     video.play();
-    return true;
   } else {
     video.pause();
-    return false;
   }
 }

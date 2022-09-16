@@ -17,6 +17,7 @@
     >
       your browser does not support the video tag
     </video>
+    <button onclick="videoToggle()">Play</button>
     <div id="box1">Esto es un test</div>
     <div id="box2">Esto es otro test</div>
     <script>
@@ -26,6 +27,7 @@
           { element: "box1", initialTime: 0, finalTime: 2 },
           { element: "box2", initialTime: 3, finalTime: 5 },
         ],
+        PausePoints: [{ pauseTime: 8 }, { pauseTime: 12 }],
       });
     </script>
   </body>
