@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <video
+      src="background.mp4"
+      id="videoTest"
+      muted="true"
+      preload="auto"
+      controls
+    >
+      your browser does not support the video tag
+    </video>
+    <div id="box1">Esto es un test</div>
+    <div id="box2">Esto es otro test</div>
+    <script>
+      EduVideo({
+        VideoID: "videoTest",
+        SpawnPoints: [
+          { element: "box1", initialTime: 0, finalTime: 2 },
+          { element: "box2", initialTime: 3, finalTime: 5 },
+        ],
+      });
+    </script>
+  </body>
+</html>
