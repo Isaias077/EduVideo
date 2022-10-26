@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <video
@@ -17,14 +18,14 @@
     >
       your browser does not support the video tag
     </video>
-    <div id="box1">Esto es un test</div>
-    <div id="box2">Esto es otro test</div>
+    <div id="chau">hola estoy poniendo esto en el modal</div>
+    <div id="adios">hola estoy psadasdasdsadoniendo esto en el modal</div>
     <script>
       EduVideo({
         VideoID: "videoTest",
         SpawnPoints: [
-          { element: "box1", initialTime: 0, finalTime: 2 },
-          { element: "box2", initialTime: 3, finalTime: 5 },
+          { time: 3, content: "chau" },
+          { time: 6, content: "adios" },
         ],
       });
     </script>
