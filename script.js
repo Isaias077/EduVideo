@@ -10,23 +10,22 @@
 
  * @author Isaías Yafar <abdel07noguera@gmail.com>
 
- * @copyright www.namus.ar
-
  *
 
  * History
 
- * v0.5 – Se mejoró la compatibilidad con navegadores Opera
+ * v0.5 – Improved the compatibility with Opera navigators
 
  * ----
 
- * La primera versión de EduVideo fue escrita por Isaías Yafar
+ * The first version of EduVideo was written by Isaías Yafar
 
         */
 var Video = /** @class */ (function () {
-    function Video() {
+    function Video(videoId) {
+        if (videoId === void 0) { videoId = "video"; }
         this.pausePoints = [];
-        this.videoID = "video";
+        this.videoID = videoId;
         this.videoElement = document.getElementById(this.videoID);
     }
     Video.prototype.setVideoID = function (id) {
@@ -42,12 +41,6 @@ var Video = /** @class */ (function () {
     Video.prototype.pause = function () {
         this.videoElement.pause();
     };
-    Video.prototype.onEnded = function (callback) {
-        this.videoElement.onended = callback;
-    };
-    Video.prototype.onPlay = function (callback) {
-        this.videoElement.onplay = callback;
-    };
     Video.prototype.onTimeUpdate = function (callback) {
         this.videoElement.addEventListener("timeupdate", callback);
     };
@@ -57,8 +50,9 @@ var Video = /** @class */ (function () {
     return Video;
 }());
 var Modal = /** @class */ (function () {
-    function Modal() {
-        this.modalID = "modal";
+    function Modal(modalId) {
+        if (modalId === void 0) { modalId = "modal"; }
+        this.modalID = modalId;
         this.modalElement = document.getElementById(this.modalID);
     }
     Modal.prototype.createModal = function () {
@@ -77,15 +71,6 @@ var Modal = /** @class */ (function () {
         this.modalElement.style.backgroundColor = "rgba(0,0,0,0.4)";
         document.body.appendChild(this.modalElement);
     };
-    Modal.prototype.addButtonExit = function () {
-        var _this = this;
-        var button = document.createElement("button");
-        button.innerHTML = "text";
-        button.onclick = function () {
-            _this.hide();
-        };
-        this.modalElement.appendChild(button);
-    };
     Modal.prototype.setModalID = function (id) {
         this.modalID = id;
         this.createModal();
@@ -102,24 +87,33 @@ var Modal = /** @class */ (function () {
         this.modalElement.innerHTML = "";
         video.play();
     };
+    Modal.prototype.addButtonExit = function () {
+        var _this = this;
+        var button = document.createElement("button");
+        button.innerHTML = "text";
+        button.onclick = function () {
+            _this.hide();
+        };
+        this.modalElement.appendChild(button);
+    };
     return Modal;
 }());
 var video = new Video();
 var modal = new Modal();
 /**
  * Main function to initialize the script
- * @param {Object}
+ * @param options
  */
 function EduVideo(options) {
     video.setVideoID(options.VideoID);
     if (options.SpawnPoints.length > 30) {
-        console.error("Atencion: No se recomienda usar más de 30 puntos de aparición. Debido a que puede afectar el rendimiento de la pagina.");
+        console.error("Attention: We not recommended use more than 30 points. They can provoke poor performance.");
         return;
     }
     video.setPausePoints(options.SpawnPoints);
     modal.setModalID("modal");
     for (var i = 0; i < video.pausePoints.length; i++) {
-        var element = document.getElementById(video.pausePoints[i].content);
+        var element = document.getElementById(video.pausePoints[i].contentToShow);
         element.style.display = "none";
     }
     StopVideoOnTime();
@@ -129,7 +123,7 @@ function StopVideoOnTime() {
         video.pausePoints.forEach(function (point) {
             if (Math.round(video.videoElement.currentTime) === point.time) {
                 video.pause();
-                modal.show(point.content);
+                modal.show(point.contentToShow);
                 video.pausePoints.splice(video.pausePoints.indexOf(point), 1);
             }
         });

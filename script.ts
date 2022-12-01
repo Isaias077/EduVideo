@@ -10,17 +10,15 @@
 
  * @author Isaías Yafar <abdel07noguera@gmail.com>
 
- * @copyright www.namus.ar
-
  *
 
  * History
 
- * v0.5 – Se mejoró la compatibilidad con navegadores Opera
+ * v0.5 – Improved the compatibility with Opera navigators
 
  * ----
 
- * La primera versión de EduVideo fue escrita por Isaías Yafar
+ * The first version of EduVideo was written by Isaías Yafar
 
         */
 
@@ -28,7 +26,7 @@
 
 interface ISpawnPoint {
   time: number;
-  content: string;
+  contentToShow: string;
 }
 
 interface IOptions {
@@ -37,53 +35,48 @@ interface IOptions {
 }
 
 class Video {
-  constructor(){
-    this.videoID = "video";
-    this.videoElement = document.getElementById(this.videoID) as HTMLVideoElement;
-  }  
-
   public videoID: string;
   public videoElement: HTMLVideoElement;
   public pausePoints: Array<ISpawnPoint> = [];
-  
-  public setVideoID(id: string){
+
+  constructor(videoId: string = "video"){
+    this.videoID = videoId;
+    this.videoElement = document.getElementById(this.videoID) as HTMLVideoElement;
+  }
+
+  public setVideoID(id: string): void{
     this.videoID = id;
     this.getVideo();
   }
-  private getVideo(){
+  private getVideo(): void{
     this.videoElement = document.getElementById(this.videoID) as HTMLVideoElement;
   }
-  public play(){
+  public play(): void{
     this.videoElement.play();
   }
-  public pause(){
+  public pause(): void{
     this.videoElement.pause();
   }
-  public onEnded(callback: any){
-    this.videoElement.onended = callback;
-  }
-  public onPlay(callback: any){
-    this.videoElement.onplay = callback;
-  }
-  public onTimeUpdate(callback: any): void{
+  public onTimeUpdate(callback: () => void): void{
     this.videoElement.addEventListener("timeupdate", callback);
   }
-  public setPausePoints(points: Array<ISpawnPoint>){
+  public setPausePoints(points: Array<ISpawnPoint>): void{
     this.pausePoints = points;
   }
 }
 
 class Modal {
-  constructor(){
-    this.modalID = "modal";
-    this.modalElement = document.getElementById(this.modalID) as HTMLDivElement;
-  }
-
   public modalID: string;
   public modalElement: HTMLDivElement;
 
+  constructor(modalId: string = "modal"){
+    this.modalID = modalId;
+    this.modalElement = document.getElementById(this.modalID) as HTMLDivElement;
+  }
+
   private createModal(){
     this.modalElement = document.createElement("div");
+
     this.modalElement.id = this.modalID;
     this.modalElement.className = "modal";
     this.modalElement.style.display = "none";
@@ -96,22 +89,15 @@ class Modal {
     this.modalElement.style.overflow = "auto";
     this.modalElement.style.backgroundColor = "rgb(0,0,0)";
     this.modalElement.style.backgroundColor = "rgba(0,0,0,0.4)";
+
     document.body.appendChild(this.modalElement);
-  }
-  
-  private addButtonExit() {
-    let button = document.createElement("button");
-    button.innerHTML = "text";
-    button.onclick = () => {
-      this.hide();
-    };
-    this.modalElement.appendChild(button);
   }
 
   public setModalID(id: string){
     this.modalID = id;
     this.createModal();
   }
+
   public show(id: string){
     this.addButtonExit();
     this.modalElement.appendChild(document.getElementById(id) as HTMLDivElement);
@@ -124,6 +110,15 @@ class Modal {
     this.modalElement.innerHTML = "";
     video.play();
   }
+
+  private addButtonExit() {
+    let button = document.createElement("button");
+    button.innerHTML = "text";
+    button.onclick = () => {
+      this.hide();
+    };
+    this.modalElement.appendChild(button);
+  }
 }
 
 let video = new Video();
@@ -131,21 +126,19 @@ let modal = new Modal();
 
 /**
  * Main function to initialize the script
- * @param {Object} 
+ * @param options
  */
 
 function EduVideo(options: IOptions) {
   video.setVideoID(options.VideoID);
   if (options.SpawnPoints.length > 30) {
-    console.error(
-      "Atencion: No se recomienda usar más de 30 puntos de aparición. Debido a que puede afectar el rendimiento de la pagina."
-    );
-    return;
+    console.error("Attention: We not recommended use more than 30 points. They can provoke poor performance.");
+    return
   }
   video.setPausePoints(options.SpawnPoints);
   modal.setModalID("modal");
   for(let i = 0; i < video.pausePoints.length; i++){
-    let element = document.getElementById(video.pausePoints[i].content) as HTMLDivElement;
+    let element = document.getElementById(video.pausePoints[i].contentToShow) as HTMLDivElement;
     element.style.display = "none";
   }
   StopVideoOnTime();
@@ -157,7 +150,7 @@ function StopVideoOnTime() {
     video.pausePoints.forEach((point) => {
       if (Math.round(video.videoElement.currentTime) === point.time) {
         video.pause();
-        modal.show(point.content);
+        modal.show(point.contentToShow);
         video.pausePoints.splice(video.pausePoints.indexOf(point), 1);
       }
     });
