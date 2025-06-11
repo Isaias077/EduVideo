@@ -60,3 +60,20 @@ EduVideo.js is a free and open source library, and we appreciate any help you're
 
 ## License
 EduVide.js is licenced under the LGPL-2.1 License
+
+## Future Feature Ideas
+
+1.  **Customizable Modal Appearance:**
+    *   **Description:** Allow users to customize the appearance of the modal (e.g., background color, text color, border, dimensions, position). Currently, the modal style is hardcoded in the `Modal.createModal()` method.
+    *   **Benefit:** This would give users more flexibility to integrate the modals seamlessly with their website's design.
+
+2.  **Different Content Types for Spawn Points:**
+    *   **Description:** Instead of just showing HTML content, allow spawn points to trigger other actions, such as:
+        *   Displaying an image or a different video.
+        *   Showing a quiz/question that the user needs to answer to continue.
+        *   Redirecting to another URL.
+    *   **Benefit:** This would make `EduVideo` more versatile for various educational (and other) use cases.
+
+3.  **Progress Bar with Spawn Point Markers:**
+    *   **Description:** Display visual markers on the video's progress bar to indicate where the spawn points are located. Users could potentially click these markers to jump to that point in the video (and trigger the modal).
+    *   **Benefit:** This would improve user experience by making it clear where interactions will occur and allowing users to navigate to them easily.
